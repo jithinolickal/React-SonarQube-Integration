@@ -1,0 +1,2 @@
+{"E:\\LEARNING\\ReactJs\\sonarqube-eslint\\src\\App.js": {"path":"E:\\LEARNING\\ReactJs\\sonarqube-eslint\\src\\App.js","statementMap":{"0":{"start":{"line":5,"column":2},"end":{"line":22,"column":4}}},"fnMap":{"0":{"name":"App","decl":{"start":{"line":4,"column":9},"end":{"line":4,"column":12}},"loc":{"start":{"line":4,"column":15},"end":{"line":23,"column":1}},"line":4}},"branchMap":{},"s":{"0":1},"f":{"0":1},"b":{},"_coverageSchema":"1a1c01bbd47fc00a2c39e90264f33305004495a9","hash":"a1cc40b91e34db9b52f53e4a2d0bb01e3f860842"}
+}

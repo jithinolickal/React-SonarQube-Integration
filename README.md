@@ -1,70 +1,75 @@
-# Getting Started with Create React App
+# How to Integrate SonarQube with React/Javascript Projects
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Getting Started
 
-## Available Scripts
+##### 1) Download and setup SonarQube
 
-In the project directory, you can run:
+- Download SonarQube from [HERE](https://www.sonarqube.org/downloads/)
+    - Start SonarQube from /bin/{OS}/StartSonar.bat
+    - Login using http://localhost:9000
+    - Username and Password is _admin_ by default
+    - Create a new project and generate a _token_
+    
 
-### `npm start`
+- Download Sonar-Scanner zip file for Javascript [HERE](https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/)
+    - Add to _/bin_ path variable and verify
+    - Add below properties to _/conf/sonar-scanner.properties_ file
+        - sonar.host.url=http://localhost:9000
+        - sonar.sourceEncoding=UTF-8
+        
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+##### 2) Add properties inside project folder
+    
+- Create a new file _sonar-project.properties_ inside project folder
+- Add below properties to the file
+    ```
+        # must be unique in a given SonarQube instance
+		sonar.projectKey=Project_Sonar
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+		# --- optional properties ---
 
-### `npm test`
+		# defaults to project key
+		sonar.projectName=My project
+		
+		# defaults to 'not provided'
+		sonar.projectVersion=1.0
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+		# Path is relative to the sonar-project.properties file. Defaults to .
+		sonar.sources=src
 
-### `npm run build`
+		# Files to exclude
+		sonar.exclusions=src/index.js, src/*.test.js
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+		# Path of coverage report from a testing library (jest)
+		sonar.javascript.lcov.reportPaths = coverage/lcov.info
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+		# Encoding of the source code. Default is default system encoding
+		sonar.sourceEncoding=UTF-8
+		```
+- NB : Make sure you ran your test cases and have _lcov.info_  coverage report for proper coverage
+    > SonarQube doesn't run your tests or generate reports. It only imports pre-generated reports.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+##### 3) Run scan using SonarQube
+- Navigate to project folder having _sonar-project.properties_ file
+- Run command ``` sonar-scanner -Dsonar.login=<token> ```
+- It will generate a report and can be viewed from http://localhost:9000
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### Notes : 
+- For jest to exclude files, use ```coveragePathIgnorePatterns``` inside package.json of your cra while running test
+``` 
+    "jest": {
+        "coveragePathIgnorePatterns": [
+          "node_modules",
+          "src/index.js",
+          "src/reportWebVitals.js"
+        ]
+    },
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
 
-## Learn More
+- Add a new script ```"coverage": "npm test . -- --coverage",``` and use ```npm run coverage``` for creating coverage report for your app
+- Use ```sonar.exclusions``` property to exclude files while running SonarQube
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
